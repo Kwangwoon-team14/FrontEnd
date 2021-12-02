@@ -1,7 +1,5 @@
-<<<<<<< HEAD
+
 # FrontEnd
-=======
-# test2
 
 ## Project setup
 ```
@@ -23,6 +21,3 @@ yarn build
 yarn lint
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
->>>>>>> 13872b453506fe58f53f95de8afc67a974aa64c5
