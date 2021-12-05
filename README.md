@@ -2,12 +2,12 @@
 
 ## Project setup
 
--frontEnd
+- frontEnd
 ```
 yarn install
 ```
 
--backEnd
+- backEnd
 ```
 yarn start
 ```
