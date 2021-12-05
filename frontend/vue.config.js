@@ -1,19 +1,16 @@
 module.exports = {
   /* connect to backend */
+
   devServer: {
     proxy: {
-      '/api': {
-        target: 'http://localhost:3000/api',
-        changeOrigin: true,
-        pathRewrite: {
-          '^/api': ''
-        }
-      }
-    }
+      // 프록시 요청을 보낼 api의 시작 부분
+      "/": {
+        // 프록시 요청을 보낼 서버의 주소
+        target: "http://localhost:3000",
+      },
+    },
   },
 
-  outputDir: '../backend/public',
-  transpileDependencies: [
-    'vuetify'
-  ]
-}
+  outputDir: "../backend/public",
+  transpileDependencies: ["vuetify"],
+};
