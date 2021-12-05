@@ -8,9 +8,6 @@
                 백신 예약
               </v-list-item-title>
               <v-layout>
-                <v-list-item-subtitle>
-                  홍길동
-                </v-list-item-subtitle>
                 <v-btn color="primary" @click="login">로그아웃</v-btn>
               </v-layout>
             </v-list-item-content>
