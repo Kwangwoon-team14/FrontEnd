@@ -70,6 +70,9 @@ export default {
         store.commit("update", data.user);
         this.$router.push("/main/home");
       }
+      else {
+        alert("잘못된 아이디 혹은 비밀번호 입니다!")
+      }
     },
     join() {
       this.$router.push("/create");
