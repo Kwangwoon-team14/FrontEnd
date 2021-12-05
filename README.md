@@ -2,8 +2,14 @@
 
 ## Project setup
 
+- frontEnd
 ```
 yarn install
+```
+
+- backEnd
+```
+yarn start
 ```
 
 ### Compiles and hot-reloads for development
