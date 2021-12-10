@@ -263,7 +263,7 @@
              while (this.items[i].Hno == res.data[2][row].Hno)
             {
               this.items[i].VaccList[count++] = res.data[2][row].Name;
-              this.items[i].Remains += ('[' + res.data[2][row++].Name + ']');
+              this.items[i].Remains += ('[' + res.data[2][row].Name + '(' + res.data[2][row++].Remains + ')'+ ']');
               if (res.data[2][row] == undefined)
                 break;
             }
