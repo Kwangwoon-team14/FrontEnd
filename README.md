@@ -1,18 +1,20 @@
-# FrontEnd
+# Youtube introduction link
 
 ## https://youtu.be/pn-e9sn7RD8
 
 ## Project setup
 
-- frontEnd
-```
-yarn install
-```
+- MySQL
+
+You need to create your DB in MySql.
+And then modify line 8~11 in 6 route files at backend/routes to your DB settings.
 
 - backEnd
 ```
-yarn start
+npm start
 ```
+Now enter "localhost:3000" and you can start program.
+
 
 ### Compiles and hot-reloads for development
 
