@@ -1,23 +1,30 @@
-import Vuex from "vuex";
+import Vuex from 'vuex'
+import Vue from 'vue'
+
+Vue.use(Vuex);
 
 export default new Vuex.Store({
-  state: {
-    user: {},
-    reservation: {},
-  },
-  mutations: {
-    update(state, data) {
-      Object.keys(data).forEach((key) => {
-        state.user[key] = data[key];
-      });
+    state: {
+        mno: '',
+        name: ''
     },
-
-    reservationUpdate(state, data) {
-      state.reservation = data;
+    mutations: {
+        SET_USER(state, info){
+            state.mno = info.mno,
+            state.name = info.name;
+        },
+        RESET_USER(state){
+            state.mno = '',
+            state.name = '';
+        }
     },
-
-    reservationRemove(state) {
-      state.reservation = {};
+    actions: {
+        async LOGIN({commit}, info){
+            commit('SET_USER', info);
+        },
+        async LOGOUT({commit}){
+            commit('RESET_USER');
+        }
     },
-  },
-});
+    getters: {}
+})

@@ -3,7 +3,7 @@
     <header style="font-size: 200%">예약하기</header>
 
     <div>
-      <h3 style="padding: 20px 10px;">의료기관 찾기 / 예약 변경</h3>
+      <h3 style="padding: 20px 10px;"> 의료기관 찾기</h3>
       <v-divider />
     </div>
 
@@ -32,71 +32,62 @@
             </v-toolbar>
           </template>
 
-          <template v-slot:default="props" v-if="items.length > 0">
+           <template v-slot:default="props" v-if="items.length > 0">
             <v-row>
-              <v-col
-                v-for="item in props.items"
-                :key="item.name"
-                cols="12"
-                sm="6"
-                md="4"
-                lg="3"
-              >
+              <v-col v-for="item in props.items" :key="item.name" cols="12" sm="6" md="4" lg="3">
                 <v-card>
                   <v-card-title class="subheading font-weight-bold">
-                    {{ item.name }}
+                    {{ item.Name }}
                   </v-card-title>
-
                   <v-divider></v-divider>
-
                   <v-list dense>
-                    <v-list-item>
-                      <v-list-item-content>
-                        서울특별시
-                      </v-list-item-content>
-                    </v-list-item>
-
-                    <v-list-item>
-                      <v-list-item-content>
-                        구
-                      </v-list-item-content>
-                      <v-list-item-content class="align-end">
-                        {{ item["gu"] }}
-                      </v-list-item-content>
-                    </v-list-item>
-
-                    <v-list-item>
-                      <v-list-item-content>
-                        동
-                      </v-list-item-content>
-                      <v-list-item-content class="align-end">
-                        {{ item["dong"] }}
-                      </v-list-item-content>
-                    </v-list-item>
-
-                    <v-list-item>
-                      <v-list-item-content>
-                        전화번호
-                      </v-list-item-content>
-                      <v-list-item-content class="align-end">
-                        {{ item["tel"] }}
-                      </v-list-item-content>
-                    </v-list-item>
-
                     <v-list-item>
                       <v-list-item-content>
                         주소
                       </v-list-item-content>
                       <v-list-item-content class="align-end">
-                        {{ item["address"] }}
+                        {{ item.City + ' ' + item.Gu + ' ' + item.Dong }}
+                      </v-list-item-content>
+                    </v-list-item>
+                    <v-list-item>
+                      <v-list-item-content>
+                        전화번호
+                      </v-list-item-content>
+                      <v-list-item-content class="align-end">
+                        {{ item["Phone"] }}
+                      </v-list-item-content>
+                    </v-list-item>
+                    <v-list-item>
+                      <v-list-item-content>
+                        휴무요일
+                      </v-list-item-content>
+                      <v-list-item-content class="align-end">
+                        {{ item["Holiday"] }}
+                      </v-list-item-content>
+                    </v-list-item>
+                    <v-list-item>
+                      <v-list-item-content>
+                        보유백신
+                      </v-list-item-content>
+                      <v-list-item-content class="align-end">
+                        {{ item["Remains"] }}
                       </v-list-item-content>
                     </v-list-item>
 
                     <v-list-item>
                       <v-list-item-content>
                         <v-select
-                          v-model="item.date"
-                          :items="dates"
+                          v-model="item.Vacc"
+                          :items="item.VaccList"
+                          value
+                          filled
+                          label="백신 선택"
+                        ></v-select>
+                      </v-list-item-content>
+                      <v-list-item-content>
+                        <v-select
+                          v-model="item.Date"
+                          :items="item.DateList"
                           value
                           filled
                           label="예약일"
@@ -104,7 +95,7 @@
                       </v-list-item-content>
                       <v-list-item-content class="align-end">
                         <v-select
-                          v-model="item.time"
+                          v-model="item.Time"
                           :items="times"
                           value
                           filled
@@ -112,13 +103,8 @@
                         ></v-select>
                       </v-list-item-content>
                     </v-list-item>
-
                     <v-card-actions class="justify-center">
-                      <v-btn
-                        color="primary"
-                        dark
-                        @click="onClickReservation(item)"
-                      >
+                      <v-btn color="primary" dark @click="onClickReservation(item)">
                         예약하기
                       </v-btn>
                     </v-card-actions>
@@ -133,14 +119,7 @@
               <span class="grey--text">Items per page</span>
               <v-menu offset-y>
                 <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                    dark
-                    text
-                    color="primary"
-                    class="ml-2"
-                    v-bind="attrs"
-                    v-on="on"
-                  >
+                  <v-btn dark text color="primary" class="ml-2" v-bind="attrs" v-on="on">
                     {{ itemsPerPage }}
                     <v-icon>mdi-chevron-down</v-icon>
                   </v-btn>
@@ -155,31 +134,14 @@
                   </v-list-item>
                 </v-list>
               </v-menu>
-
               <v-spacer></v-spacer>
-
-              <span
-                class="mr-4
-                grey--text"
-              >
+              <span class="mr-4 grey--text">
                 Page {{ page }} of {{ numberOfPages }}
               </span>
-              <v-btn
-                fab
-                dark
-                color="blue darken-3"
-                class="mr-1"
-                @click="formerPage"
-              >
+              <v-btn fab dark color="blue darken-3" class="mr-1" @click="formerPage">
                 <v-icon>mdi-chevron-left</v-icon>
               </v-btn>
-              <v-btn
-                fab
-                dark
-                color="blue darken-3"
-                class="ml-1"
-                @click="nextPage"
-              >
+              <v-btn fab dark color="blue darken-3" class="ml-1" @click="nextPage">
                 <v-icon>mdi-chevron-right</v-icon>
               </v-btn>
             </v-row>
@@ -193,183 +155,124 @@
 </template>
 
 <script>
-import store from "../../store";
-export default {
-  data() {
-    return {
-      itemsPerPageArray: [4, 8, 12],
-      search: "",
-      type: "",
-      filter: {},
-      sortDesc: false,
-      page: 1,
-      itemsPerPage: 4,
-      sortBy: "name",
-      sortByGu: "",
-      seoul: "서울특별시",
-      vaccine: ["아스트라제네카", "안센", "화이자", "모더나"],
-      gu: [
-        "강남구",
-        "강동구",
-        "강북구",
-        "강서구",
-        "광진구",
-        "구로구",
-        "금천구",
-        "노원구",
-        "도봉구",
-        "동대문구",
-        "마포구",
-        "서대문구",
-        "서초구",
-        "성동구",
-        "송파구",
-        "양천구",
-        "영등포구",
-        "용산구",
-        "은평구",
-        "종로구",
-        "중구",
-        "중랑구",
-      ],
-      keys: ["Name", "서울특별시", "구", "동", "전화번호", "주소"],
-      dates: ["1/15", "2/15", "3/10", "4/20", "5/30", "6/22", "7/12", "8/6"],
-      times: [
-        "14:00",
-        "14:30",
-        "15:00",
-        "15:30",
-        "16:00",
-        "16:30",
-        "17:00",
-        "17:30",
-        "18:00",
-        "18:30",
-      ],
-      items: [],
-    };
-  },
-  computed: {
-    numberOfPages() {
-      return Math.ceil(this.items.length / this.itemsPerPage);
-    },
-    filteredKeys() {
-      return this.keys.filter((key) => key !== "Name");
-    },
-  },
-  methods: {
-    nextPage() {
-      if (this.page + 1 <= this.numberOfPages) this.page += 1;
-    },
-    formerPage() {
-      if (this.page - 1 >= 1) this.page -= 1;
-    },
-    updateItemsPerPage(number) {
-      this.itemsPerPage = number;
-    },
-    createItems() {
-      this.items = [
-        {
-          name: "아이비 이비인후과 의원",
-          gu: "영등포구",
-          dong: "청담동",
-          tel: "02-479-1234",
-          address: "서울특별시 영등포구 여의도동 43-4",
-          date: "2021-12-05",
-          time: "14:00",
-        },
-        {
-          name: "상쾌한이비인후과 의원",
-          gu: "강동구",
-          dong: "강동",
-          tel: "02-472-1234",
-          address: "562 한빛프라자, 송파대로 송파구 서울특별시",
-          date: "2021-12-05",
-          time: "14:00",
-        },
-        {
-          name: "송내과의원",
-          gu: "중구",
-          dong: "을지로4가",
-          tel: "02-444-1234",
-          address: "서울특별시 성북구 종암동 70-1",
-          date: "2021-12-05",
-          time: "14:00",
-        },
-        {
-          name: "늘편한내과의원",
-          gu: "강동구",
-          dong: "성내동",
-          tel: "02-473-1234",
-          address: "서울특별시 강동구 성내동 439-15",
+  export default {
+    data () {
+      return {
+        itemsPerPageArray: [4, 8, 12],
+        page: 1,
+        itemsPerPage: 4,
+        sortDesc: false,
+        sortBy: "name",
+        search: "",
+        items: [],
+        day: ['일', '월', '화', '수', '목', '금', '토'],
 
-          date: "2021-12-05",
-          time: "14:00",
-        },
-        {
-          name: "해맑은이비인후과의원",
-          gu: "송파구",
-          dong: "잠실본동",
-          tel: "02-479-2314",
-          address: "서울특별시 송파구 잠실본동 184-21",
-          date: "2021-12-05",
-          time: "14:00",
-        },
-        {
-          name: "강동중앙내과외과의원",
-          gu: "강동구",
-          dong: "강동",
-          tel: "02-479-2223",
-          address: "서울특별시 강동구 길동 411-4번지 3층",
-          date: "2021-12-05",
-          time: "14:00",
-        },
-        {
-          name: "송파중앙병원",
-          gu: "송파구",
-          dong: "풍납1동",
-          tel: "02-479-1245",
-          address: "서울특별시 송파구 올림픽로 326 05552",
-          date: "2021-12-05",
-          time: "14:00",
-        },
-        {
-          name: "광운중앙병원",
-          gu: "성동구",
-          dong: "용답동",
-          tel: "070-7555-1221",
-          address: "서울특별시 노원구 월계1동 광운로 20",
-          date: "2021-12-05",
-          time: "14:00",
-        },
-        {
-          name: "중앙보훈병원",
-          gu: "강동구",
-          dong: "둔촌2동",
-          tel: "070-7525-1221",
-          address: "서울특별시 강동구 둔촌2동 진황도로61길 53",
-          date: "2021-12-05",
-          time: "14:00",
-        },
-        {
-          name: "스타이비인후과 의원",
-          gu: "송파구",
-          dong: "석촌동",
-          tel: "070-7555-2311",
-          address: "서울특별시 송파구 석촌동 백제고분로 365",
-          date: "2021-12-05",
-          time: "14:00",
-        },
-      ];
+        times: ["09:00", "10:00", "11:00", "12:00","13:00",
+                "14:00", "15:00", "16:00", "17:00","18:00"]
+      }
     },
-    onClickReservation(item) {
-      store.commit("reservationUpdate", item);
-      alert("예약되었습니다.");
-      this.$router.push("/main/check");
+    computed: {
+      numberOfPages () {
+        return Math.ceil(this.items.length / this.itemsPerPage);
+      }
     },
-  },
-  created() {
-    this.createItems();
-  },
-};
+    methods: {
+      nextPage () {
+        if (this.page + 1 <= this.numberOfPages) this.page += 1;
+      },
+      formerPage () {
+        if (this.page - 1 >= 1) this.page -= 1;
+      },
+      updateItemsPerPage (number) {
+        this.itemsPerPage = number;
+      },
+      onClickReservation(item) {
+        if (item.Vacc != '' && item.Date != '' && item.Time != '') {
+          item.Mno = this.$store.state.mno
+          this.$http.post(`/main/reservation`, item)
+          .then(res => {
+            // reservation success
+            if (res.data.success == true) {
+              alert(res.data.message)
+              this.$router.push('/main/check');
+            }
+            //  reservation fail
+            if (res.data.success == false) {
+              alert(res.data.message)
+            }
+            })
+          .catch(err => {
+            alert(err);
+          });
+        }
+        else  alert("예약정보를 모두 선택해주세요!");
+      }
+    },
+    created() {
+      // GET for hospital data (+ holiday, vaccine)
+       this.$http.get(`/main/reservation/hospital`)
+      .then(res => {
+        // standard hospital data
+        this.items = res.data[0];
+        // hospital holiday, date, reservation date, time
+        var row = 0;
+        for (var i = 0; i < (this.items).length; i++)
+        {
+          this.items[i].HolidayList = [];
+          this.items[i].Holiday = '';
+          var count = 0;
+          if (res.data[1][row] !== undefined) {
+            while (this.items[i].Hno == res.data[1][row].Hno)
+            {
+              this.items[i].HolidayList[count++] = res.data[1][row].Day;
+              this.items[i].Holiday += ('[' + res.data[1][row++].Day + ']');
+              if (res.data[1][row] == undefined)
+                break;
+            }
+          }
+          const today = new Date();
+          const year = today.getFullYear();
+          const month = today.getMonth();
+          const day = today.getDate();
+          this.items[i].DateList = [];
+          this.items[i].Date = '';
+          this.items[i].Time = '';
+          count = 0;
+          for (var j = 1; j < 61; j++)
+          {
+            var temp = new Date(year, month, day + j);
+            var k = 0;
+            for (k = 0; k < this.items[i].HolidayList.length; k++)
+            {
+              if (this.items[i].HolidayList[k] == this.day[temp.getDay()])  
+                break;
+            }
+            if (k == this.items[i].HolidayList.length)
+              this.items[i].DateList[count++] = temp.getFullYear() + '-' + (temp.getMonth()+1) + '-' + temp.getDate();
+          }
+        }
+        // hospital's vaccine 
+        row = 0;
+        for (i = 0; i < (this.items).length; i++)
+        {
+          this.items[i].VaccList = [];
+          this.items[i].Remains = '';
+          this.items[i].Vacc = '';
+          count = 0;
+          if (res.data[2][row] !== undefined) {
+             while (this.items[i].Hno == res.data[2][row].Hno)
+            {
+              this.items[i].VaccList[count++] = res.data[2][row].Name;
+              this.items[i].Remains += ('[' + res.data[2][row++].Name + ']');
+              if (res.data[2][row] == undefined)
+                break;
+            }
+          }
+        }
+      })
+      .catch(err => {
+        alert(err);
+      });
+    }
+  };
 </script>

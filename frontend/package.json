@@ -1,5 +1,5 @@
 {
-  "name": "ddd",
+  "name": "test2",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,9 +9,15 @@
   },
   "dependencies": {
     "axios": "^0.22.0",
+    "chart.js": "^3.6.2",
+    "chartkick": "^4.1.1",
     "core-js": "^3.6.5",
+    "hchs-vue-charts": "^1.2.8",
     "sass-loader": "^10.2.0",
     "vue": "^2.6.11",
+    "vue-chartjs": "^3.5.1",
+    "vue-chartkick": "^1.1.0",
+    "vue-google-charts": "^0.3.3",
     "vue-router": "^3.2.0",
     "vuetify": "^2.4.0",
     "vuex": "^3.6.2"

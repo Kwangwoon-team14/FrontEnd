@@ -25,10 +25,13 @@ group by month order by month;
 
 
 CREATE OR REPLACE VIEW region_count as
-SELECT M.City, R.Date, count(*) as people
+SELECT M.City, count(*) as people
 FROM member M join reservation R on M.Mno=R.Mno
-group by M.City, R.Date
-oRDER BY M.City, R.Date;
+WHERE R.Date <= date_format(now(), '%Y-%m-%d')
+group by M.City
+oRDER BY M.City;
+
+SELECT * FROM region_count;
 
 SELECT 			   (SELECT sum(people) FROM region_count 
 				   WHERE city like '서울%' AND Date=date_format(now(), '%Y-%m-%d')) as r1_cur,
@@ -76,11 +79,13 @@ SELECT (case
             when M.Age between 40 and 49 then 4
             when M.Age between 50 and 59 then 5
             when M.Age between 60 and 69 then 6
-            when M.Age >= 70 then 7 END) as front_age,
-		R.Date, count(*) as people
+            when M.Age >= 70 then 7 END) as front_age, count(*) as people
 FROM member M join reservation R on M.Mno=R.Mno
-GROUP BY front_age, R.Date
-ORDER BY front_age, R.Date;
+WHERE R.Date <= date_format(now(), '%Y-%m-%d')
+GROUP BY front_age
+ORDER BY front_age;
+
+SELECT * FROM age_count;
 
 SELECT (SELECT sum(people) FROM age_count
                         WHERE front_age=1 AND Date=date_format(now(), '%Y-%m-%d')) as a1_cur,

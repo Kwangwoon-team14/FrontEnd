@@ -1,7 +1,0 @@
-{
-  "scripts": {
-    "backend": "nodemon ./backend/bin/www",
-    "frontend": "cd ./frontend && yarn serve",
-    "build": "cd ./frontend && yarn build"
-  }
-}

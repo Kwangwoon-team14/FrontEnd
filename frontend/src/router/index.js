@@ -7,37 +7,45 @@ const routes = [
   {
     path: "/",
     name: "Login",
-    component: () => import("../views/Login"),
+    component: () => import(/* webpackChunkName: "about" */ "../views/Login"),
   },
   {
     path: "/create",
     name: "Create",
-    component: () => import("../views/Create"),
+    component: () => import(/* webpackChunkName: "about" */ "../views/Create"),
   },
   {
     path: "/main",
     name: "main",
-    component: () => import("../views"),
+    component: () => import(/* webpackChunkName: "about" */ "../views"),
     children: [
       {
         name: "home",
         path: "home",
-        component: () => import("../views/Detail/home.vue"),
+        component: () =>
+          import(/* webpackChunkName: "about" */ "../views/Detail/home.vue"),
       },
       {
         name: "reservation",
         path: "reservation",
-        component: () => import("../views/Detail/reservation.vue"),
+        component: () =>
+          import(
+            /* webpackChunkName: "about" */ "../views/Detail/reservation.vue"
+          ),
       },
       {
         name: "check",
         path: "check",
-        component: () => import("../views/Detail/check.vue"),
+        component: () =>
+          import(/* webpackChunkName: "about" */ "../views/Detail/check.vue"),
       },
       {
         name: "personal",
         path: "personal",
-        component: () => import("../views/Detail/personal.vue"),
+        component: () =>
+          import(
+            /* webpackChunkName: "about" */ "../views/Detail/personal.vue"
+          ),
       },
     ],
   },
@@ -45,7 +53,6 @@ const routes = [
 
 const router = new VueRouter({
   mode: "history",
-  history: true,
   base: process.env.BASE_URL,
   routes,
 });

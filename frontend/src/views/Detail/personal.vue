@@ -6,25 +6,16 @@
         <v-toolbar class="mb-2" color="indigo darken-5" dark flat>
           <v-toolbar-title>개인정보</v-toolbar-title>
         </v-toolbar>
-        <v-divider />
+          <v-divider />
 
-        <template v-if="user.name">
+        <template v-if="this.$store.state.mno">
           <v-container>
             <v-row>
               <v-col>
                 <v-text-field
-                  v-model="user.id"
+                  v-model="user.Id"
                   label="id"
-                  :disabled="edit !== true"
-                ></v-text-field>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col>
-                <v-text-field
-                  v-model="user.name"
-                  label="이름"
-                  :disabled="edit !== true"
+                  :disabled="true"
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -32,7 +23,17 @@
             <v-row>
               <v-col>
                 <v-text-field
-                  v-model="user.gender"
+                  v-model="user.Name"
+                  label="이름"
+                  :disabled="true"
+                ></v-text-field>
+              </v-col>
+            </v-row>
+            <v-divider />
+            <v-row>
+              <v-col>
+                <v-text-field
+                  v-model="gender"
                   label="성별"
                   :disabled="edit !== true"
                 ></v-text-field>
@@ -42,7 +43,7 @@
             <v-row>
               <v-col>
                 <v-text-field
-                  v-model="user.age"
+                  v-model="user.Age"
                   label="나이"
                   :disabled="edit !== true"
                 ></v-text-field>
@@ -52,7 +53,7 @@
             <v-row>
               <v-col>
                 <v-text-field
-                  v-model="user.tel"
+                  v-model="user.Phone"
                   label="전화번호"
                   :disabled="edit !== true"
                 ></v-text-field> </v-col
@@ -61,7 +62,7 @@
             <v-row>
               <v-col>
                 <v-text-field
-                  v-model="user.email"
+                  v-model="user.Email"
                   label="이메일"
                   :disabled="edit !== true"
                 ></v-text-field>
@@ -71,7 +72,7 @@
             <v-row>
               <v-col>
                 <v-text-field
-                  v-model="user.address"
+                  v-model="user.Address"
                   label="주소"
                   :disabled="edit !== true"
                 ></v-text-field>
@@ -80,17 +81,12 @@
             <v-divider />
           </v-container>
         </template>
+        
         <v-toolbar class="mt-2" color="indigo" dark flat>
           <v-toolbar-title class="subheading">
-            <v-btn
-              color="blue"
-              right
-              @click="onClickEdit"
-              v-if="edit === false"
-            >
+            <v-btn color="blue" right @click="onClickEdit" v-if="edit === false">
               수정하기
             </v-btn>
-
             <template v-else>
               <v-btn color="blue" right @click="onClickCancel">
                 취소하기
@@ -107,12 +103,12 @@
 </template>
 
 <script>
-import store from "../../store";
 export default {
   data() {
     return {
       user: {},
-      edit: false,
+      gender: '',
+      edit: false
     };
   },
 
@@ -120,20 +116,46 @@ export default {
     onClickEdit() {
       this.edit = true;
     },
+
     onClickCancel() {
+      this.$http.get(`/main/personal/${this.$store.state.mno}`)
+      .then(res => {
+        this.user = res.data;
+        if (this.user.Sex == 'F')  this.gender = '여자';
+        else  this.gender = '남자';
+      })
+      .catch(err => {
+        alert(err);
+      });
       this.edit = false;
     },
+
     onClickSave() {
       if (confirm("회원정보를 변경하시겠습니까?")) {
-        store.commit("update", this.user);
-        this.edit = false;
-        alert("변경되었습니다.");
+        if (this.gender == '여자')  this.user.Sex == 'F';
+        else  this.user.Sex = 'M';
+        this.$http.patch(`/main/personal/${this.$store.state.mno}`, this.user)
+        .then(res => {
+          alert(res.data.message);
+        })
+        .catch(err =>{
+          alert(err);
+        });
+        this.onClickCancel();
       }
     },
   },
 
   created() {
-    this.user = { ...store.state.user };
+    this.$http.get(`/main/personal/${this.$store.state.mno}`)
+    .then(res => {
+      this.user = res.data;
+      if (this.user.Sex == 'F')  this.gender = '여자';
+      else  this.gender = '남자';
+    })
+    .catch(err => {
+      alert(err);
+    });
   },
 };
 </script>

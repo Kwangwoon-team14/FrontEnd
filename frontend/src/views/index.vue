@@ -8,7 +8,10 @@
                 백신 예약
               </v-list-item-title>
               <v-layout>
-                <v-btn color="primary" @click="login">로그아웃</v-btn>
+                <v-list-item-subtitle>
+                  {{this.$store.state.name}} 님
+                </v-list-item-subtitle>
+                <v-btn color="primary" @click="logout">로그아웃</v-btn>
               </v-layout>
             </v-list-item-content>
           </v-list-item>
@@ -51,7 +54,8 @@ export default {
     };
   },
   methods: {
-    login() {
+    logout() {
+      this.$store.dispatch('LOGOUT');
       this.$router.push("/");
     },
     

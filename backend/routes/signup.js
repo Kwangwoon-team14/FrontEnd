@@ -4,16 +4,17 @@ var router = express.Router();
 /* MySQL loading */
 var mysql = require('mysql');
 var pool = mysql.createPool({
+    // please change to your db info
     host: 'localhost',
     user: 'root',
     password: '981223',
+    port: 3333,
     database: 'vaccine_reservation_system'
 });
 
 /* POST for Sign up */
 router.post('/', function(req, res, next) {
     var name = req.body.name;
-    var gender = req.body.gender;
     var number = req.body.number;
     var email = req.body.email;
     var id = req.body.id;
@@ -22,6 +23,9 @@ router.post('/', function(req, res, next) {
     var address = req.body.address;
     var City = address.split(' ')[0];
     var addr_details = address.substring(City.length+1);
+    var gender = req.body.gender;
+    if (gender == '여자') gender = 'F'
+    else gender = "M";
 
     pool.getConnection(function(err, connection){
         // Fail to DB connection
@@ -31,10 +35,9 @@ router.post('/', function(req, res, next) {
         connection.query(query, [id], function(err, row){
             // same id not exist
             if (row[0] == undefined) {
-                var sql = "INSERT INTO member value (NULl, ?, ?, ?, ?, ? ,?, ?, ?, ?);";
+                var sql = "INSERT INTO member value (NULL, ?, ?, ?, ?, ? ,?, ?, ?, ?);";
                 connection.query(sql, [name, gender, number, email, age, City, addr_details, id, passwd], function(err, row){
                     if (err) throw err;
-                    connection.release();
                 });
                 res.json({
                     success: true,
