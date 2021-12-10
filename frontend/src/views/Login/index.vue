@@ -4,7 +4,7 @@
       <v-flex xs12 sm8 md4>
         <v-card fluid outlined>
           <v-card-title>
-              개인정보 조회
+              로그인
           </v-card-title>
               <v-divider />
           <v-card-text>
