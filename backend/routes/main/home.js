@@ -13,7 +13,7 @@ var pool = mysql.createPool({
     multipleStatements: true
 });
 
-/* GET for reservation result */
+/* GET for today reservation result */
 router.get('/', function(req, res, next) {
     var query1 = "SELECT (SELECT count(*) FROM reservation\
                          WHERE Inoculation=1 AND Date<=date_format(now(), '%Y-%m-%d')) as TodayAccum1,\
@@ -33,14 +33,56 @@ router.get('/', function(req, res, next) {
                          WHERE Inoculation=2 AND Date<date_format(now(), '%Y-%m-%d')) as YestAccum2,\
                         (SELECT count(*) FROM reservation\
                          WHERE Date<date_format(now(), '%Y-%m-%d')) as YestAccum;";   
+    pool.getConnection(function(err, connection){
+        // Fail to DB connection
+        if (err) throw err;
+        // Use DB connection
+        connection.query(query1, function(err, rows){
+            if (err) throw err;
+            res.send(rows);
+            connection.release();
+        }); 
+    });
+});
+
+/* GET for reservation result per month */
+router.get('/month', function(req, res, next) {
     var query2 = "SELECT (date_format(Date, '%Y-%m')) as month, count(*) as count\
                   FROM reservation group by month order by month;"
+    pool.getConnection(function(err, connection){
+        // Fail to DB connection
+        if (err) throw err;
+        // Use DB connection
+        connection.query(query2, function(err, rows){
+            if (err) throw err;
+            res.send(rows);
+            connection.release();
+        }); 
+    });
+});
+
+/* GET for reservation result per region */
+router.get('/region', function(req, res, next) {
     var sql3 = "CREATE OR REPLACE VIEW region_count as\
                 SELECT M.City, count(*) as people\
                 FROM member M join reservation R on M.Mno=R.Mno\
                 WHERE R.Date <= date_format(now(), '%Y-%m-%d')\
                 group by M.City ORDER BY M.City;"; 
     var query3 = "SELECT * FROM region_count;";  
+    pool.getConnection(function(err, connection){
+        // Fail to DB connection
+        if (err) throw err;
+        // Use DB connection
+        connection.query(sql3+query3, function(err, rows){
+            if (err) throw err;
+            res.send(rows);
+            connection.release();
+        }); 
+    });
+});
+
+/* GET for reservation result age */
+router.get('/age', function(req, res, next) {
     var sql4 = "CREATE OR REPLACE VIEW age_count as\
                 SELECT (case when M.Age <= 19 then '10대이하'\
                         when M.Age between 20 and 29 then '20대'\
@@ -57,12 +99,11 @@ router.get('/', function(req, res, next) {
         // Fail to DB connection
         if (err) throw err;
         // Use DB connection
-        connection.query(query1+query2+sql3+query3+sql4+query4, function(err, rows){
+        connection.query(sql4+query4, function(err, rows){
             if (err) throw err;
             res.send(rows);
             connection.release();
         }); 
     });
 });
-
 module.exports = router;
